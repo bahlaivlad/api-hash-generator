@@ -41,5 +41,6 @@ def generate_all_hashes():
 
 
 if __name__ == '__main__':
-    # generate_all_hashes()
-    generate_hashes(hash_func=rol_hash, output_file='0xC543A742.csv', modifier=MODIFIER_FUNC_STUB, offset=24, seed=0xC543A742)
+    generate_all_hashes()
+    # An example of ROL24 hash generation:
+    # generate_hashes(hash_func=ro  l_hash, output_file='0xC543A742.csv', modifier=MODIFIER_FUNC_STUB, offset=24, seed=0xC543A742)
