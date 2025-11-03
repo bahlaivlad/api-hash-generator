@@ -1,13 +1,13 @@
 # Author of rol, ror functions: https://gist.github.com/vqhuy/a7a5cde5ce1b679d3c0a
 # Rotate left: 0b1001 --> 0b0011
-rol = lambda val, r_bits, max_bits: \
-    (val << r_bits % max_bits) & (2 ** max_bits - 1) | \
-    ((val & (2 ** max_bits - 1)) >> (max_bits - (r_bits % max_bits)))
+rol = lambda val, r_bits, max_bits: (val << r_bits % max_bits) & (2**max_bits - 1) | (
+    (val & (2**max_bits - 1)) >> (max_bits - (r_bits % max_bits))
+)
 
 # Rotate right: 0b1001 --> 0b1100
-ror = lambda val, r_bits, max_bits: \
-    ((val & (2 ** max_bits - 1)) >> r_bits % max_bits) | \
-    (val << (max_bits - (r_bits % max_bits)) & (2 ** max_bits - 1))
+ror = lambda val, r_bits, max_bits: ((val & (2**max_bits - 1)) >> r_bits % max_bits) | (
+    val << (max_bits - (r_bits % max_bits)) & (2**max_bits - 1)
+)
 
 
 def bzip2_crc32(data: bytes):
@@ -77,17 +77,24 @@ def bzip2_crc32(data: bytes):
         0xafb010b1, 0xab710d06, 0xa6322bdf, 0xa2f33668,
         0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4
     )
-    crcVar = 0xffffffff  # Init
+    crcVar = 0xFFFFFFFF  # Init
     for b in data:
-        crcVar = crcVar & 0xffffffff  # Unsigned
-        crcVar = ((crcVar << 8) ^ (BZ2_crc32Table[(crcVar >> 24) ^ b]))
+        crcVar = crcVar & 0xFFFFFFFF  # Unsigned
+        crcVar = (crcVar << 8) ^ (BZ2_crc32Table[(crcVar >> 24) ^ b])
 
-    return ~crcVar & 0xffffffff
+    return ~crcVar & 0xFFFFFFFF
 
 
 def rol_hash(data: bytes, offset: int, seed: int):
-    data += b'\x00'
+    data += b"\x00"
     h = seed
     for i in range(len(data) - 1):
-        h = (((data[i + 1] << 8) + data[i]) + h + rol(h, offset, 32)) & 0xffffffff
+        h = (((data[i + 1] << 8) + data[i]) + h + rol(h, offset, 32)) & 0xFFFFFFFF
+    return h
+
+
+def BackupWinTrojan(data: bytes):
+    h = 0xF29E2F
+    for b in data:
+        h = (h + 32 * h + b) & 0xFFFFFFFF
     return h
